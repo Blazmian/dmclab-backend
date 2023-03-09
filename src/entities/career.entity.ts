@@ -8,7 +8,7 @@ export class Career {
     @PrimaryGeneratedColumn()
     id : number
 
-    @Column()
+    @Column({ length : 50 })
     career : string
 
     @OneToMany(() => Subject, (subject) => subject.career)

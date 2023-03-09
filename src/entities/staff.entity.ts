@@ -1,16 +1,16 @@
-import { Entity, PrimaryColumn, Column} from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column} from "typeorm"
 
 @Entity()
 export class Staff {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id : number
 
-    @Column()
+    @Column({ length : 50 })
     name : string
 
-    @Column()
+    @Column({ length : 30 })
     first_last_name : string
     
-    @Column()
+    @Column({ length : 30 })
     second_last_name : string
 }

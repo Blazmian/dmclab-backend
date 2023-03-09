@@ -7,19 +7,19 @@ export class Teacher {
     @PrimaryColumn()
     control_number : number
 
-    @Column()
+    @Column({ length : 50 })
     name : string
 
-    @Column()
+    @Column({ length : 30 })
     first_last_name : string
 
-    @Column()
+    @Column({ length : 30 })
     second_last_name : string
 
-    @Column()
+    @Column({ length : 13 })
     rfc : string
 
-    @Column()
+    @Column("varbinary")
     fingerprint : string
 
     @Column()

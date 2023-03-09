@@ -3,13 +3,13 @@ import { Staff } from "./staff.entity"
 
 @Entity()
 export class Admin {
-    @PrimaryColumn()
+    @PrimaryColumn("varchar", {length : 10})
     username : string
 
     @OneToOne(() => Staff)
     @JoinColumn()
     staff: Staff
 
-    @Column() 
+    @Column("varchar", { length : 15 }) 
     password : string
 }

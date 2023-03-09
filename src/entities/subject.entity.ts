@@ -9,7 +9,7 @@ export class Subject {
     @PrimaryColumn()
     id : number
 
-    @Column()
+    @Column({ length : 50 })
     subject : string
 
     @ManyToOne(() => Career, (career) => career.id)

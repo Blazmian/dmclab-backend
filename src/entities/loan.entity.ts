@@ -18,13 +18,13 @@ export class Loan {
     @ManyToOne(() => Subject, (subject) => subject.id)
     subject_id : Subject
     
-    @Column()
+    @Column("date")
     date : Date
     
     @Column()
     hours : number
     
-    @Column()
+    @Column({ length : 10 })
     class : string
     
     @Column()
@@ -32,9 +32,15 @@ export class Loan {
     
     @Column()
     delivered : boolean
+
+    @Column("time")
+    delivery_time : Date
     
     @Column()
     returned : boolean
+
+    @Column("time")
+    return_time : Date
 
     @OneToMany(() => LoanDetails, (details) => details.loan)
     details : LoanDetails[]

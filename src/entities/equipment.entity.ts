@@ -1,32 +1,35 @@
-import { Entity, PrimaryColumn, Column, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 import { LoanDetails } from "./loan.details.entity"
 
 @Entity()
 export class Equipment {
-    @PrimaryColumn()
-    id : number
+    @PrimaryGeneratedColumn()
+    id: number
 
-    @Column()
-    equipment_name : string
+    @Column({ length : 50 })
+    equipment_name: string
     
-    @Column()
-    brand : string
+    @Column({ length : 30})
+    brand: string
+
+    @Column({ length : 30})
+    model: string
+
+    @Column({length : 50})
+    serial_number: string
 
     @Column()
-    model : string
+    projector: boolean 
 
     @Column()
-    serial_number : string
+    extension: boolean
 
     @Column()
-    projector : boolean 
+    hdmi: boolean
 
     @Column()
-    extension : boolean
-
-    @Column()
-    hdmi : boolean
+    damaged: boolean
 
     @OneToMany(() => LoanDetails, (details) => details.equipment)
-    details : LoanDetails[]
+    details: LoanDetails[]
 }
