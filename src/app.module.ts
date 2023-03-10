@@ -1,3 +1,6 @@
+import { EquipmentModule } from './api/Equipment/equipment.module';
+import { EquipmentService } from './api/Equipment/equipment.service';
+import { EquipmentController } from './api/Equipment/equipment.controller';
 import { ReceptionistController } from './api/Receptionist/receptionist.controller';
 import { ReceptionistModule } from './api/Receptionist/receptionist.module';
 import { ReceptionistService } from './api/Receptionist/receptionist.service';
@@ -20,18 +23,21 @@ import { Connection } from './configs/DBConnection';
 
 @Module({
   imports: [
+    EquipmentModule,
     ReceptionistModule,
     StaffModule,
     AdminModule,
     CareerModule,
     StudentModule, Connection],
   controllers: [
+    EquipmentController,
     ReceptionistController,
     StaffController,
     AdminController,
     CareerController,
     StudentController, AppController],
   providers: [
+    EquipmentService,
     ReceptionistService,
     StaffService,
     AdminService,
