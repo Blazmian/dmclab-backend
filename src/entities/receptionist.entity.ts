@@ -11,7 +11,7 @@ export class Receptionist {
     @JoinColumn()
     staff: Staff
 
-    @Column({ length : 15 }) 
+    @Column('text') 
     password : string
 
     @Column("varbinary")

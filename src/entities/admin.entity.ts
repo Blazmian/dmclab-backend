@@ -10,6 +10,6 @@ export class Admin {
     @JoinColumn()
     staff: Staff
 
-    @Column("varchar", { length : 15 }) 
+    @Column('text') 
     password : string
 }

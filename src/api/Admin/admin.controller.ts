@@ -32,7 +32,7 @@ export class AdminController {
     }
 
     @Get('one/:username')
-    getAdmin(@Param('username') params) : Promise<Admin[]> | string {
+    getAdmin(@Param('username') params) : Promise<Admin> | string {
         try {
             const res = this.adminService.get(params)
             return res
