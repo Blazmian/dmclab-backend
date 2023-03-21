@@ -23,6 +23,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Connection } from './configs/DBConnection';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { Connection } from './configs/DBConnection';
     StaffModule,
     AdminModule,
     CareerModule,
-    StudentModule, Connection],
+    StudentModule,
+    Connection],
   controllers: [
     AuthController,
     EquipmentController,
@@ -42,12 +44,13 @@ import { Connection } from './configs/DBConnection';
     CareerController,
     StudentController, AppController],
   providers: [
+    JwtService,
     AuthService,
     EquipmentService,
     ReceptionistService,
     StaffService,
     AdminService,
     CareerService,
-    StudentService, AppService],
+    StudentService, AppService, ],
 })
 export class AppModule { }

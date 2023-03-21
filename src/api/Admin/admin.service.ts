@@ -25,7 +25,8 @@ export class AdminService {
     }
 
     async get(username : string) : Promise<AdminEntity> {
-        return await this.adminEntity.findOne({ where: { username: username } })
+        return await this.adminEntity.findOne({ where: { username: username },
+        relations: { staff: true } })
     }
 
     async update(username : string, body : IAdmin) {
