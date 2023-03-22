@@ -10,7 +10,7 @@ export class AuthController {
 
     @UseGuards(LocalAuthGuard)
     @Post('login')
-    loginAdmin(@Body() adminObj: IAdminLogin) {
-        return this.authService.login(adminObj)
+    async loginAdmin(@Body() adminObj: IAdminLogin) {
+        return await this.authService.login(adminObj)
     }
 }

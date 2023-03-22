@@ -14,7 +14,8 @@ export class AuthService {
 
     async validateAdmin(username: string, pass: string): Promise<any> {
         const admin = await this.adminService.get(username)
-        
+        if(!admin) throw new HttpException('USER_NOT_FOUND', 404)
+
         const checkPassword = await compare(pass, admin.password)
 
         if (admin && checkPassword) {
@@ -26,15 +27,11 @@ export class AuthService {
 
     async login(adminObj: IAdminLogin) {
         const findAdmin = await this.adminService.get(adminObj.username)
-        if(!findAdmin) throw new HttpException('USER_NOT_FOUND', 404)
 
         const payload = { id: findAdmin.staff, user: findAdmin.username }
-        const token = this.jwtService.sign(payload, { secret: jwtConstants.secret, expiresIn: '60s' })
-
-        const data = {
+        return {
             admin: findAdmin,
-            token,
+            token: this.jwtService.sign(payload, { secret: jwtConstants.secret, expiresIn: '60s' })
         }
-        return data
     }
 }
