@@ -1,22 +1,21 @@
-import { Entity, PrimaryColumn, Column, OneToMany, OneToOne, JoinColumn } from "typeorm"
+import { Entity, PrimaryColumn, Column, OneToMany, OneToOne, JoinColumn, PrimaryGeneratedColumn } from "typeorm"
 import { Loan } from "./loan.entity"
 import { Staff } from "./staff.entity"
 
 @Entity()
 export class Receptionist {
-    @PrimaryColumn("varchar", {length : 10})
-    username : string
+    @PrimaryGeneratedColumn()
+    id: number
 
-    @OneToOne(() => Staff)
-    @JoinColumn()
-    staff: Staff
+    @Column("varchar", { length: 10, unique: true })
+    username: string
 
-    @Column('text') 
-    password : string
+    @Column('text')
+    password: string
 
     @Column("varbinary")
-    fingerprint : string
+    fingerprint: string
 
     @OneToMany(() => Loan, (loan) => loan.receptionist)
-    loans : Loan[]
+    loans: Loan[]
 }

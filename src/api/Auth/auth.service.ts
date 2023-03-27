@@ -28,7 +28,7 @@ export class AuthService {
     async login(adminObj: IAdminLogin) {
         const findAdmin = await this.adminService.get(adminObj.username)
 
-        const payload = { id: findAdmin.staff, user: findAdmin.username }
+        const payload = { user: findAdmin.username }
         return {
             admin: findAdmin,
             token: this.jwtService.sign(payload, { secret: jwtConstants.secret, expiresIn: '60s' })
