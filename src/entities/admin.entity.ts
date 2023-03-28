@@ -11,9 +11,9 @@ export class Admin {
     @Column('text')
     password: string
 
-    @Column({ default: 1 })
+    @Column({ default: true })
     canDelete: boolean
 
-    @Column({ default: 1 })
+    @Column({ default: true })
     canUpdate: boolean
 }
