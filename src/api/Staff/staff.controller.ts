@@ -29,7 +29,7 @@ export class StaffController {
     }
 
     @Get('one/:id')
-    getPersonal(@Param('id') params) : Promise<Staff[]> | string {
+    getPersonal(@Param('id') params) : Promise<Staff> | string {
         try {
             const res = this.staffService.get(params)
             return res

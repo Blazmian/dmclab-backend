@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Staff as StaffEntity } from 'src/entities/staff.entity';
-import { IStaff } from 'src/models/Staff';
+import { IAdmin } from 'src/models/Admin';
+import { IStaff, IStaffAll } from 'src/models/Staff';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -19,15 +20,24 @@ export class StaffService {
         })
     }
 
-    async get(id: number): Promise<StaffEntity[]> {
-        return await this.staffEntity.find(
+    async get(id: number): Promise<StaffEntity> {
+        return await this.staffEntity.findOne(
             {
-                where: { id: id }
+                where: { id: id },
+                relations: ['admin', 'receptionist']
             })
+    }
+
+    async getById(id: number): Promise<StaffEntity> {
+        return await this.staffEntity.findOneBy({ id: id })
     }
 
     async update(id: number, body: IStaff) {
         return await this.staffEntity.update(id, body)
+    }
+
+    async updateInfo(staff: IStaffAll): Promise<StaffEntity> {
+        return await this.staffEntity.save(staff)
     }
 
     async delete(id: number) {

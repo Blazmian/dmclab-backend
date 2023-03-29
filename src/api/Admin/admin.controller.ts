@@ -3,26 +3,26 @@ import { Put } from '@nestjs/common/decorators';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Admin } from 'src/entities/admin.entity';
 import { IAdmin } from 'src/models/Admin';
+import { InsertResult } from 'typeorm';
 import { AdminService } from './admin.service';
 
 @Controller('admin')
 export class AdminController {
 
-    constructor (private adminService : AdminService) {}
+    constructor(private adminService: AdminService) { }
 
-    @Post()
-    Create(@Body() params : IAdmin) {
+    @Post(':idStaff')
+    Create(@Param('idStaff') idStaff: number, @Body() params: IAdmin): Promise<true | string> | string {
         try {
-            const res = this.adminService.create(params)
-            console.log("Admin created")
-            return true
+            const res = this.adminService.create(idStaff, params)
+            return res
         } catch (error) {
             return "Cannot create admin: " + error
         }
     }
 
     @Get('all')
-    getAdmins() : Promise<Admin[]> | string {
+    getAdmins(): Promise<Admin[]> | string {
         try {
             const res = this.adminService.getAll()
             return res
@@ -32,7 +32,7 @@ export class AdminController {
     }
 
     @Get('one/:username')
-    getAdmin(@Param('username') params) : Promise<Admin> | string {
+    getAdmin(@Param('username') params): Promise<Admin> | string {
         try {
             const res = this.adminService.get(params)
             return res
@@ -42,12 +42,12 @@ export class AdminController {
     }
 
     @Put('update/:username')
-    updatePersonal(@Param('username') username : string, @Body() params : IAdmin) {
+    updatePersonal(@Param('username') username: string, @Body() params: IAdmin) {
         try {
             const res = this.adminService.update(username, params)
             return res
         } catch (error) {
-            return "Cannot update personal: " + error            
+            return "Cannot update personal: " + error
         }
     }
 
