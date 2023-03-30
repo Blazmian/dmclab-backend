@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Admin as AdminEntity } from 'src/entities/admin.entity';
-import { IAdmin } from 'src/models/Admin';
+import { IAdminPermission, IAdminLogin } from 'src/models/Admin';
 import { Repository } from 'typeorm';
 import { hash } from 'bcrypt'
 import { StaffService } from '../Staff/staff.service';
@@ -15,7 +15,7 @@ export class AdminService {
         private staffService: StaffService
     ) { }
 
-    async create(idUser: number, admin: IAdmin) {
+    async create(idUser: number, admin: IAdminLogin) {
         const validateUsername = await this.get(admin.username)
         if (!validateUsername) {
             const { password } = admin
@@ -40,11 +40,26 @@ export class AdminService {
         return await this.adminEntity.findOne({ where: { username: username } })
     }
 
-    async update(username: string, body: IAdmin) {
-        return await this.adminEntity.update(username, body)
+    async getByUsername(username: string): Promise<AdminEntity> {
+        return await this.adminEntity.findOneBy({ username: username })
     }
 
-    async delete(username: string) {
+    async update(username: string, body: IAdminPermission) {
+        const admin = await this.getByUsername(username)
+        admin.canDelete = body.canDelete
+        admin.canUpdate = body.canUpdate
+        return await this.adminEntity.save(admin)
+    }
+
+    async delete(idUser: number, username: string) {
+        const staff = await this.staffService.get(idUser)
+        if (!staff) {
+            return
+        }
+
+        staff.admin = null;
+        await this.staffService.updateInfo(staff)
+
         return await this.adminEntity.delete(username)
     }
 }

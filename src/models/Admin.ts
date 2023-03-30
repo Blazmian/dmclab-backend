@@ -1,7 +1,6 @@
-export interface IAdmin {
-    username : string
-    password : string 
-    staffId : number
+export interface IAdminPermission {
+    canDelete: boolean
+    canUpdate: boolean
 }
 
 export interface IAdminLogin {

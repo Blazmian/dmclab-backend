@@ -1,9 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { Put } from '@nestjs/common/decorators';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Admin } from 'src/entities/admin.entity';
-import { IAdmin } from 'src/models/Admin';
-import { InsertResult } from 'typeorm';
+import { IAdminLogin, IAdminPermission } from 'src/models/Admin';
 import { AdminService } from './admin.service';
 
 @Controller('admin')
@@ -12,7 +10,7 @@ export class AdminController {
     constructor(private adminService: AdminService) { }
 
     @Post(':idStaff')
-    Create(@Param('idStaff') idStaff: number, @Body() params: IAdmin): Promise<true | string> | string {
+    Create(@Param('idStaff') idStaff: number, @Body() params: IAdminLogin): Promise<true | string> | string {
         try {
             const res = this.adminService.create(idStaff, params)
             return res
@@ -42,7 +40,7 @@ export class AdminController {
     }
 
     @Put('update/:username')
-    updatePersonal(@Param('username') username: string, @Body() params: IAdmin) {
+    updatePersonal(@Param('username') username: string, @Body() params: IAdminPermission) {
         try {
             const res = this.adminService.update(username, params)
             return res
@@ -51,10 +49,10 @@ export class AdminController {
         }
     }
 
-    @Delete('delete/:username')
-    deleteAdmin(@Param('username') params) {
+    @Delete('delete/:idStaff')
+    deleteAdmin(@Param('idStaff') idStaff, @Body() params: string) {
         try {
-            const res = this.adminService.delete(params)
+            const res = this.adminService.delete(idStaff, params)
             return res
         } catch (error) {
             return "Cannot delete admin: " + error

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Staff as StaffEntity } from 'src/entities/staff.entity';
-import { IAdmin } from 'src/models/Admin';
 import { IStaff, IStaffAll } from 'src/models/Staff';
 import { Repository } from 'typeorm';
 
@@ -29,7 +28,7 @@ export class StaffService {
     }
 
     async getById(id: number): Promise<StaffEntity> {
-        return await this.staffEntity.findOneBy({ id: id })
+        return await this.staffEntity.findOne({ where: { id: id } })
     }
 
     async update(id: number, body: IStaff) {

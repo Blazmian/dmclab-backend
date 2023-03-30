@@ -7,12 +7,11 @@ import { ReceptionistService } from './receptionist.service';
 export class ReceptionistController {
     constructor (private receptionistService : ReceptionistService) {}
 
-    @Post()
-    Create(@Body() params : IReceptionist) {
+    @Post(':idStaff')
+    Create(@Param('idStaff') idStaff: number, @Body() params : IReceptionist) {
         try {
-            const res = this.receptionistService.create(params)
-            console.log("Receptionist created")
-            return true
+            const res = this.receptionistService.create(idStaff, params)
+            return res
         } catch (error) {
             return "Cannot create receptionist: " + error
         }
@@ -29,7 +28,7 @@ export class ReceptionistController {
     }
 
     @Get('one/:username')
-    getReceptionist(@Param('username') params) : Promise<Receptionist[]> | string {
+    getReceptionist(@Param('username') params) : Promise<Receptionist> | string {
         try {
             const res = this.receptionistService.get(params)
             return res
@@ -58,10 +57,10 @@ export class ReceptionistController {
         }
     }
 
-    @Delete('delete/:username')
-    deleteReceptionist(@Param('username') params) {
+    @Delete('delete/:idStaff')
+    deleteReceptionist(@Param('idStaff') idStaff, @Body() params: string) {
         try {
-            const res = this.receptionistService.delete(params)
+            const res = this.receptionistService.delete(idStaff, params)
             return res
         } catch (error) {
             return "Cannot delete receptionist: " + error
