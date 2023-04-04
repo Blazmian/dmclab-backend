@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { IAdminLogin } from 'src/models/Admin';
-import { AdminService } from '../Admin/admin.service';
+import { IUserLogin } from 'src/models/User';
+import { UserService } from '../User/user.service';
 import { compare } from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constanst';
@@ -8,12 +8,12 @@ import { jwtConstants } from './constanst';
 @Injectable()
 export class AuthService {
     constructor(
-        private adminService: AdminService,
+        private userService: UserService,
         private jwtService: JwtService
     ) {}
 
     async validateAdmin(username: string, pass: string): Promise<any> {
-        const admin = await this.adminService.get(username)
+        const admin = await this.userService.get(username)
         if(!admin) throw new HttpException('USER_NOT_FOUND', 404)
 
         const checkPassword = await compare(pass, admin.password)
@@ -25,8 +25,8 @@ export class AuthService {
         return null
     }
 
-    async login(adminObj: IAdminLogin) {
-        const findAdmin = await this.adminService.get(adminObj.username)
+    async login(adminObj: IUserLogin) {
+        const findAdmin = await this.userService.get(adminObj.username)
 
         const payload = { user: findAdmin.username }
         return {

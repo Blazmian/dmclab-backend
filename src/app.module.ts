@@ -4,15 +4,12 @@ import { AuthService } from './api/Auth/auth.service';
 import { EquipmentModule } from './api/Equipment/equipment.module';
 import { EquipmentService } from './api/Equipment/equipment.service';
 import { EquipmentController } from './api/Equipment/equipment.controller';
-import { ReceptionistController } from './api/Receptionist/receptionist.controller';
-import { ReceptionistModule } from './api/Receptionist/receptionist.module';
-import { ReceptionistService } from './api/Receptionist/receptionist.service';
+import { UserController } from './api/User/user.controller';
+import { UserModule } from './api/User/user.module';
+import { UserService } from './api/User/user.service';
 import { StaffService } from './api/Staff/staff.service';
 import { StaffModule } from './api/Staff/staff.module';
 import { StaffController } from './api/Staff/staff.controller';
-import { AdminService } from './api/Admin/admin.service';
-import { AdminModule } from './api/Admin/admin.module';
-import { AdminController } from './api/Admin/admin.controller';
 import { CareerController } from './api/Career/career.controller';
 import { CareerService } from './api/Career/career.service';
 import { CareerModule } from './api/Career/career.module';
@@ -29,27 +26,24 @@ import { JwtService } from '@nestjs/jwt';
   imports: [
     AuthModule,
     EquipmentModule,
-    ReceptionistModule,
+    UserModule,
     StaffModule,
-    AdminModule,
     CareerModule,
     StudentModule,
     Connection],
   controllers: [
     AuthController,
     EquipmentController,
-    ReceptionistController,
+    UserController,
     StaffController,
-    AdminController,
     CareerController,
     StudentController, AppController],
   providers: [
     JwtService,
     AuthService,
     EquipmentService,
-    ReceptionistService,
+    UserService,
     StaffService,
-    AdminService,
     CareerService,
     StudentService, AppService, ],
 })

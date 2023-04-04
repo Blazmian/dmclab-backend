@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Receptionist as ReceptionistEntity } from 'src/entities/receptionist.entity';
+import { User as UserEntity } from 'src/entities/user.entity';
 import { IReceptionist } from 'src/models/Receptionist';
 import { hash } from 'bcrypt'
 import { Repository } from 'typeorm';
 import { StaffService } from '../Staff/staff.service';
 
 @Injectable()
-export class ReceptionistService {
+export class UserService {
     constructor(
-        @InjectRepository(ReceptionistEntity)
-        private receptionistEntity: Repository<ReceptionistEntity>,
+        @InjectRepository(UserEntity)
+        private userEntity: Repository<UserEntity>,
         private staffService: StaffService
         ) { }
 
@@ -21,10 +21,10 @@ export class ReceptionistService {
             const { password } = receptionist
             const plainToHash = await hash(password, 10)
             receptionist = { ...receptionist, password: plainToHash }
-            const res = await this.receptionistEntity.insert(receptionist)
-            const newReceptionist = await this.receptionistEntity.findOneBy({ id: res.identifiers[0].id })
+            const res = await this.userEntity.insert(receptionist)
+            const newReceptionist = await this.userEntity.findOneBy({ id: res.identifiers[0].id })
             const staff = await this.staffService.getById(idUser)
-            staff.receptionist = newReceptionist
+            staff.user = newReceptionist
             await this.staffService.updateInfo(staff)
             return true
         } else {
@@ -32,20 +32,20 @@ export class ReceptionistService {
         }
     }
 
-    async getAll(): Promise<ReceptionistEntity[]> {
-        return await this.receptionistEntity.find()
+    async getAll(): Promise<UserEntity[]> {
+        return await this.userEntity.find()
     }
 
-    async get(username: string): Promise<ReceptionistEntity> {
-        return await this.receptionistEntity.findOne({ where: { username: username } })
+    async get(username: string): Promise<UserEntity> {
+        return await this.userEntity.findOne({ where: { username: username } })
     }
 
     async update(username: string, body: IReceptionist) {
-        return await this.receptionistEntity.update(username, body)
+        return await this.userEntity.update(username, body)
     }
 
     async submitFingerprint(id: string, body: string) {
-        return await this.receptionistEntity.update(id, { fingerprint: body })
+        return await this.userEntity.update(id, { fingerprint: body })
     }
 
     async delete(idUser: number, username: string) {
@@ -54,9 +54,9 @@ export class ReceptionistService {
             return
         }
 
-        staff.receptionist = null;
+        staff.user = null;
         await this.staffService.updateInfo(staff)
 
-        return await this.receptionistEntity.delete(username)
+        return await this.userEntity.delete(username)
     }
 }

@@ -1,9 +1,9 @@
-export interface IAdminPermission {
+export interface IUserPermission {
     canDelete: boolean
     canUpdate: boolean
 }
 
-export interface IAdminLogin {
+export interface IUserLogin {
     username : string
     password : string
 }

@@ -1,9 +1,8 @@
 import { Entity, PrimaryColumn, Column, OneToMany, OneToOne, JoinColumn, PrimaryGeneratedColumn } from "typeorm"
 import { Loan } from "./loan.entity"
-import { Staff } from "./staff.entity"
 
 @Entity()
-export class Receptionist {
+export class User {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -16,6 +15,6 @@ export class Receptionist {
     @Column("varbinary")
     fingerprint: string
 
-    @OneToMany(() => Loan, (loan) => loan.receptionist)
+    @OneToMany(() => Loan, (loan) => loan.user)
     loans: Loan[]
 }

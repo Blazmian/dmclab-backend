@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
 import { LoanDetails } from "./loan.details.entity"
-import { Receptionist } from "./receptionist.entity"
+import { User } from "./user.entity"
 import { Student } from "./student.entity"
 import { Subject } from "./subject.entity"
 
@@ -12,8 +12,8 @@ export class Loan {
     @ManyToOne(() => Student, (student) => student.control_number)
     student : Student
     
-    @ManyToOne(() => Receptionist, (receptionist) => receptionist.username)
-    receptionist : Receptionist
+    @ManyToOne(() => User, (user) => user.username)
+    user : User
     
     @ManyToOne(() => Subject, (subject) => subject.id)
     subject_id : Subject

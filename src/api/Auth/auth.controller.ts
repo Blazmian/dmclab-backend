@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { IAdminLogin } from 'src/models/Admin';
+import { IUserLogin } from 'src/models/User';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 
@@ -10,7 +10,7 @@ export class AuthController {
 
     @UseGuards(LocalAuthGuard)
     @Post('login')
-    async loginAdmin(@Body() adminObj: IAdminLogin) {
+    async loginAdmin(@Body() adminObj: IUserLogin) {
         return await this.authService.login(adminObj)
     }
 }

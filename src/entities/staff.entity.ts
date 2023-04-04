@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm"
-import { Admin } from "./admin.entity"
-import { Receptionist } from "./receptionist.entity"
+import { User } from "./user.entity"
 
 @Entity()
 export class Staff {
@@ -16,11 +15,10 @@ export class Staff {
     @Column({ length: 30 })
     second_last_name: string
 
-    @OneToOne(() => Admin)
-    @JoinColumn()
-    admin: Admin
+    @Column('blob')
+    photo: string
 
-    @OneToOne(() => Receptionist)
+    @OneToOne(() => User)
     @JoinColumn()
-    receptionist: Receptionist
+    user: User
 }

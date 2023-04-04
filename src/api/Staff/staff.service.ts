@@ -47,9 +47,8 @@ export class StaffService {
         if (!staff) {
             return
         }
-
-        staff.admin = null
-        staff.receptionist = null
+        
+        staff.user = null
 
         await this.updateInfo(staff)
 
