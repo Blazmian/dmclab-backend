@@ -7,7 +7,10 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class StaffService {
 
-    constructor(@InjectRepository(StaffEntity) private staffEntity: Repository<StaffEntity>) { }
+    constructor(
+        @InjectRepository(StaffEntity)
+        private staffEntity: Repository<StaffEntity>,
+    ) { }
 
     async create(staff: IStaff) {
         return await this.staffEntity.insert(staff)
@@ -40,6 +43,16 @@ export class StaffService {
     }
 
     async delete(id: number) {
+        const staff = await this.get(id)
+        if (!staff) {
+            return
+        }
+
+        staff.admin = null
+        staff.receptionist = null
+
+        await this.updateInfo(staff)
+
         return await this.staffEntity.delete(id)
     }
 }

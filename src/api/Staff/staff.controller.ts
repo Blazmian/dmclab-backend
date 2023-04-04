@@ -5,10 +5,10 @@ import { StaffService } from './staff.service';
 
 @Controller('staff')
 export class StaffController {
-    constructor (private staffService : StaffService) {}
+    constructor(private staffService: StaffService) { }
 
     @Post()
-    Create(@Body() params : IStaff) {
+    Create(@Body() params: IStaff) {
         try {
             const res = this.staffService.create(params)
             console.log("Staff created")
@@ -19,7 +19,7 @@ export class StaffController {
     }
 
     @Get('all')
-    getStaff() : Promise<Staff[]> | string {
+    getStaff(): Promise<Staff[]> | string {
         try {
             const res = this.staffService.getAll()
             return res
@@ -29,7 +29,7 @@ export class StaffController {
     }
 
     @Get('one/:id')
-    getPersonal(@Param('id') params) : Promise<Staff> | string {
+    getPersonal(@Param('id') params): Promise<Staff> | string {
         try {
             const res = this.staffService.get(params)
             return res
@@ -39,12 +39,12 @@ export class StaffController {
     }
 
     @Put('update/:id')
-    updatePersonal(@Param('id') id : number, @Body() params : IStaff) {
+    updatePersonal(@Param('id') id: number, @Body() params: IStaff) {
         try {
             const res = this.staffService.update(id, params)
             return res
         } catch (error) {
-            return "Cannot update personal: " + error            
+            return "Cannot update personal: " + error
         }
     }
 
