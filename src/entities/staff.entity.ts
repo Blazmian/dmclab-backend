@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany } from "typeorm"
 import { User } from "./user.entity"
 
 @Entity()
@@ -18,7 +18,12 @@ export class Staff {
     @Column('blob')
     photo: string
 
-    @OneToOne(() => User)
-    @JoinColumn()
-    user: User
+    @Column({ default: false })
+    admin: boolean
+
+    @Column({ default: false })
+    receptionist: boolean
+
+    @OneToMany(() => User, (user) => user.staff)
+    user: User[]
 }

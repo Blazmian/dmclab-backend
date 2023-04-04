@@ -12,25 +12,25 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
 
-    async validateAdmin(username: string, pass: string): Promise<any> {
-        const admin = await this.userService.get(username)
-        if(!admin) throw new HttpException('USER_NOT_FOUND', 404)
+    async validateUser(username: string, pass: string): Promise<any> {
+        const user = await this.userService.get(username)
+        if(!user) throw new HttpException('USER_NOT_FOUND', 404)
 
-        const checkPassword = await compare(pass, admin.password)
+        const checkPassword = await compare(pass, user.password)
 
-        if (admin && checkPassword) {
-            const { password, ...result } = admin
+        if (user && checkPassword) {
+            const { password, ...result } = user
             return result
         }
         return null
     }
 
-    async login(adminObj: IUserLogin) {
-        const findAdmin = await this.userService.get(adminObj.username)
+    async login(userObj: IUserLogin) {
+        const findUser = await this.userService.get(userObj.username)
 
-        const payload = { user: findAdmin.username }
+        const payload = { user: findUser.username, staff: findUser.staff }
         return {
-            admin: findAdmin,
+            admin: findUser,
             token: this.jwtService.sign(payload, { secret: jwtConstants.secret, expiresIn: '60s' })
         }
     }

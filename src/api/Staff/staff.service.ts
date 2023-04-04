@@ -18,7 +18,7 @@ export class StaffService {
 
     async getAll(): Promise<StaffEntity[]> {
         return await this.staffEntity.find({
-            relations: ['admin', 'receptionist']
+            relations: { user: true }
         })
     }
 
@@ -26,7 +26,7 @@ export class StaffService {
         return await this.staffEntity.findOne(
             {
                 where: { id: id },
-                relations: ['admin', 'receptionist']
+                relations: { user: true }
             })
     }
 
@@ -47,7 +47,7 @@ export class StaffService {
         if (!staff) {
             return
         }
-        
+
         staff.user = null
 
         await this.updateInfo(staff)

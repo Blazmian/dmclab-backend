@@ -4,11 +4,14 @@ export interface IStaff {
     name : string
     first_last_name : string
     second_last_name : string
+    photo: string
 }
 
 export interface IStaffAll {
     name : string
     first_last_name : string
     second_last_name : string
-    user: User
+    admin: boolean
+    receptionist: boolean
+    user: User[]
 }

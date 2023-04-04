@@ -14,17 +14,17 @@ export class UserService {
         private staffService: StaffService
         ) { }
 
-    async create(idUser: number, receptionist: IReceptionist) {
-        const validateUsername = await this.get(receptionist.username)
+    async create(idUser: number, user: IReceptionist) {
+        const validateUsername = await this.get(user.username)
         console.log(validateUsername)
         if (!validateUsername) {
-            const { password } = receptionist
+            const { password } = user
             const plainToHash = await hash(password, 10)
-            receptionist = { ...receptionist, password: plainToHash }
-            const res = await this.userEntity.insert(receptionist)
-            const newReceptionist = await this.userEntity.findOneBy({ id: res.identifiers[0].id })
+            user = { ...user, password: plainToHash }
+            const res = await this.userEntity.insert(user)
+            const newUser = await this.userEntity.findOneBy({ id: res.identifiers[0].id })
             const staff = await this.staffService.getById(idUser)
-            staff.user = newReceptionist
+            staff.user[0] = newUser
             await this.staffService.updateInfo(staff)
             return true
         } else {

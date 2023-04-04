@@ -1,5 +1,6 @@
-import { Entity, PrimaryColumn, Column, OneToMany, OneToOne, JoinColumn, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, PrimaryColumn, Column, OneToMany, OneToOne, JoinColumn, PrimaryGeneratedColumn, ManyToOne } from "typeorm"
 import { Loan } from "./loan.entity"
+import { Staff } from "./staff.entity"
 
 @Entity()
 export class User {
@@ -14,6 +15,9 @@ export class User {
 
     @Column("varbinary")
     fingerprint: string
+
+    @ManyToOne(() => Staff, (staff) => staff.user)
+    staff: Staff
 
     @OneToMany(() => Loan, (loan) => loan.user)
     loans: Loan[]
