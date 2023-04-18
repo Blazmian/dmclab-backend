@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Res } from '@nestjs/common';
 import { Staff } from 'src/entities/staff.entity';
 import { IStaff } from 'src/models/Staff';
 import { StaffService } from './staff.service';
+import { Request, Response } from 'express';
+import * as path from 'path'
 
 @Controller('staff')
 export class StaffController {
@@ -28,11 +30,32 @@ export class StaffController {
         }
     }
 
+    @Get('all/:id')
+    getStaffWithoutCurrent(@Param('id') params): Promise<Staff[]> | string {
+        try {
+            const res = this.staffService.getAllWithoutCurrent(params)
+            return res
+        } catch (error) {
+            return "Cannot read staff: " + error
+        }
+    }
+
     @Get('one/:id')
     getPersonal(@Param('id') params): Promise<Staff> | string {
         try {
             const res = this.staffService.get(params)
             return res
+        } catch (error) {
+            return "Cannot read staff: " + error
+        }
+    }
+
+    @Get('one/photo/:id')
+    async getStaffPhoto(@Param('id') params, @Res() res: Response): Promise<void | string> {
+        try {
+            const staff = await this.staffService.getUserPhoto(params)
+            res.set('Content-Type', 'image/*')
+            res.send(staff.photo)
         } catch (error) {
             return "Cannot read staff: " + error
         }

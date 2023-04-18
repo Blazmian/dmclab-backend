@@ -15,8 +15,8 @@ export class Staff {
     @Column({ length: 30 })
     second_last_name: string
 
-    @Column('blob')
-    photo: string
+    @Column('longblob')
+    photo: Buffer
 
     @Column({ default: false })
     admin: boolean

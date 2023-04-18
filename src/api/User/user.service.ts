@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User as UserEntity } from 'src/entities/user.entity';
-import { IReceptionist } from 'src/models/Receptionist';
 import { hash } from 'bcrypt'
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { StaffService } from '../Staff/staff.service';
+import { IUser } from 'src/models/User';
 
 @Injectable()
 export class UserService {
@@ -12,21 +12,26 @@ export class UserService {
         @InjectRepository(UserEntity)
         private userEntity: Repository<UserEntity>,
         private staffService: StaffService
-        ) { }
+    ) { }
 
-    async create(idUser: number, user: IReceptionist) {
+    async create(idStaff: number, typeUser: string, user: IUser) {
         const validateUsername = await this.get(user.username)
-        console.log(validateUsername)
         if (!validateUsername) {
             const { password } = user
             const plainToHash = await hash(password, 10)
-            user = { ...user, password: plainToHash }
-            const res = await this.userEntity.insert(user)
-            const newUser = await this.userEntity.findOneBy({ id: res.identifiers[0].id })
-            const staff = await this.staffService.getById(idUser)
-            staff.user[0] = newUser
+
+            const staff = await this.staffService.get(idStaff)
+            if (typeUser === 'admin') {
+                staff.admin = true
+            } else {
+                staff.receptionist = true
+            }
             await this.staffService.updateInfo(staff)
-            return true
+
+            user = { ...user, password: plainToHash, staff: staff }
+            const res = await this.userEntity.insert(user)
+
+            return res
         } else {
             return "Duplicated Username"
         }
@@ -37,10 +42,15 @@ export class UserService {
     }
 
     async get(username: string): Promise<UserEntity> {
-        return await this.userEntity.findOne({ where: { username: username } })
+        return await this.userEntity.findOne(
+            {
+                where: { username: username },
+                relations: { staff: true }
+            }
+        )
     }
 
-    async update(username: string, body: IReceptionist) {
+    async update(username: string, body: IUser) {
         return await this.userEntity.update(username, body)
     }
 
@@ -54,7 +64,9 @@ export class UserService {
             return
         }
 
-        staff.user = null;
+        staff.admin = false
+        staff.receptionist = false
+
         await this.staffService.updateInfo(staff)
 
         return await this.userEntity.delete(username)

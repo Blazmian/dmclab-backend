@@ -1,16 +1,16 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { User } from 'src/entities/user.entity';
-import { IReceptionist } from 'src/models/Receptionist';
 import { UserService } from './user.service';
+import { IUser } from 'src/models/User';
 
 @Controller('user')
 export class UserController {
-    constructor (private userService : UserService) {}
+    constructor(private userService: UserService) { }
 
-    @Post(':idStaff')
-    Create(@Param('idStaff') idStaff: number, @Body() params : IReceptionist) {
+    @Post(':idStaff/:typeUser')
+    Create(@Param('idStaff') idStaff: number, @Param('typeUser') typeUser: string, @Body() params: IUser) {
         try {
-            const res = this.userService.create(idStaff, params)
+            const res = this.userService.create(idStaff, typeUser, params)
             return res
         } catch (error) {
             return "Cannot create user: " + error
@@ -18,7 +18,7 @@ export class UserController {
     }
 
     @Get('all')
-    getUsers() : Promise<User[]> | string {
+    getUsers(): Promise<User[]> | string {
         try {
             const res = this.userService.getAll()
             return res
@@ -28,7 +28,7 @@ export class UserController {
     }
 
     @Get('one/:username')
-    getUser(@Param('username') params) : Promise<User> | string {
+    getUser(@Param('username') params): Promise<User> | string {
         try {
             const res = this.userService.get(params)
             return res
@@ -38,27 +38,27 @@ export class UserController {
     }
 
     @Put('update/:username')
-    updateUser(@Param('username') username : string, @Body() params : IReceptionist) {
+    updateUser(@Param('username') username: string, @Body() params: IUser) {
         try {
             const res = this.userService.update(username, params)
             return res
         } catch (error) {
-            return "Cannot update user: " + error            
+            return "Cannot update user: " + error
         }
     }
 
     @Put('fingerprint/:username')
-    submitFingerprintUser(@Param('username') username : string, @Body() params : string) {
+    submitFingerprintUser(@Param('username') username: string, @Body() params: string) {
         try {
             const res = this.userService.submitFingerprint(username, params)
             return res
         } catch (error) {
-            return "Cannot submit user fingerprint: " + error            
+            return "Cannot submit user fingerprint: " + error
         }
     }
 
     @Delete('delete/:idStaff')
-    deleteUser(@Param('idStaff') idStaff, @Body() params: string) {
+    deleteUser(@Param('idStaff') idStaff: number, @Body() params: string) {
         try {
             const res = this.userService.delete(idStaff, params)
             return res
