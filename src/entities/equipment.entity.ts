@@ -9,6 +9,9 @@ export class Equipment {
     @Column({ length : 50 })
     equipment_name: string
     
+    @Column()
+    equipment_number: number
+
     @Column({ length : 30})
     brand: string
 
@@ -29,6 +32,9 @@ export class Equipment {
 
     @Column()
     damaged: boolean
+
+    @Column()
+    photo: Buffer
 
     @OneToMany(() => LoanDetails, (details) => details.equipment)
     details: LoanDetails[]

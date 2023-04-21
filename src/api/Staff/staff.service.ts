@@ -15,21 +15,24 @@ export class StaffService {
     ) { }
 
     async create(staff: IStaff) {
-        const tempFileName = uuidv4()
         if (!fs.existsSync(`${process.cwd()}/temp`)) {
             fs.mkdirSync(`${process.cwd()}/temp`);
         }
-        const tempFilePath = `${process.cwd()}/temp/${tempFileName}`
-        fs.writeFileSync(tempFilePath, staff.photo)
 
         const newStaff = new StaffEntity()
         newStaff.name = staff.name
         newStaff.first_last_name = staff.first_last_name
         newStaff.second_last_name = staff.second_last_name
-        newStaff.photo = fs.readFileSync(tempFilePath)
-        const res = await this.staffEntity.save(newStaff)
 
-        fs.unlinkSync(tempFilePath)
+        if (staff.photo) {
+            const tempFileName = uuidv4()
+            const tempFilePath = `${process.cwd()}/temp/${tempFileName}`
+            fs.writeFileSync(tempFilePath, staff.photo)
+            newStaff.photo = fs.readFileSync(tempFilePath)
+            fs.unlinkSync(tempFilePath)
+        }
+
+        const res = await this.staffEntity.save(newStaff)
 
         return res
     }
@@ -58,13 +61,12 @@ export class StaffService {
             })
     }
 
-    async getUserPhoto(id: number): Promise<{ photo: string }> {
+    async getUserPhoto(id: number): Promise<Buffer> {
         const res = await this.staffEntity.findOne({
             where: { id: id },
             select: ['photo'],
         })
-        const base64 = res.photo.toString('base64')
-        return { photo: base64 }
+        return res.photo
     }
 
     async getById(id: number): Promise<StaffEntity> {

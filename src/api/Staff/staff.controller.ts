@@ -55,7 +55,7 @@ export class StaffController {
         try {
             const staff = await this.staffService.getUserPhoto(params)
             res.set('Content-Type', 'image/*')
-            res.send(staff.photo)
+            res.send(staff)
         } catch (error) {
             return "Cannot read staff: " + error
         }
