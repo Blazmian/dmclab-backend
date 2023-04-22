@@ -2,8 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Res } from '@nestjs/co
 import { Staff } from 'src/entities/staff.entity';
 import { IStaff } from 'src/models/Staff';
 import { StaffService } from './staff.service';
-import { Request, Response } from 'express';
-import * as path from 'path'
+import { Response } from 'express';
 
 @Controller('staff')
 export class StaffController {

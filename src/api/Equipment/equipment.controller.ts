@@ -1,11 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Res } from '@nestjs/common';
 import { Equipment } from 'src/entities/equipment.entity';
 import { IEquipment } from 'src/models/Equipment';
 import { EquipmentService } from './equipment.service';
+import { Response } from 'express';
+import { UpdateResult } from 'typeorm';
 
 @Controller('equipment')
 export class EquipmentController {
-    constructor (private equipmentService : EquipmentService) {}
+    constructor(private equipmentService: EquipmentService) { }
 
     @Post()
     Create(@Body() params: IEquipment) {
@@ -19,7 +21,7 @@ export class EquipmentController {
     }
 
     @Get('all')
-    getEquipments() : Promise<Equipment[]> | string {
+    getEquipments(): Promise<Equipment[]> | string {
         try {
             const res = this.equipmentService.getAll()
             return res
@@ -29,7 +31,7 @@ export class EquipmentController {
     }
 
     @Get('one/:id')
-    getEquipment(@Param('id') params) : Promise<Equipment[]> | string {
+    getEquipment(@Param('id') params): Promise<Equipment[]> | string {
         try {
             const res = this.equipmentService.get(params)
             return res
@@ -38,8 +40,19 @@ export class EquipmentController {
         }
     }
 
+    @Get('one/photo/:id')
+    async getEquipmentPhoto(@Param('id') params, @Res() res: Response): Promise<void | string> {
+        try {
+            const photo = await this.equipmentService.getEquipmentPhoto(params)
+            res.set('Content-Type', 'image/*')
+            res.send(photo)
+        } catch (error) {
+            return "Cannot read Equipment: " + error
+        }
+    }
+
     @Get('undamaged')
-    getUndamagedEquipment() : Promise<Equipment[]> | string {
+    getUndamagedEquipment(): Promise<Equipment[]> | string {
         try {
             const res = this.equipmentService.getUndamagedEquipment()
             return res
@@ -49,7 +62,7 @@ export class EquipmentController {
     }
 
     @Get('damaged')
-    getDamagedEquipment() : Promise<Equipment[]> | string {
+    getDamagedEquipment(): Promise<Equipment[]> | string {
         try {
             const res = this.equipmentService.getDamagedEquipment()
             return res
@@ -58,13 +71,23 @@ export class EquipmentController {
         }
     }
 
+    @Put('damaged/:id')
+    changeDamaged(@Param('id') id: number): Promise<UpdateResult> | string {
+        try {
+            const res = this.equipmentService.changeEquipmentDamaged(id)
+            return res
+        } catch (error) {
+            return "Cannot change the equipment damage: " + error
+        }
+    }
+
     @Put('update/:id')
-    updateEquipment(@Param('id') id : number, @Body() params : IEquipment) {
+    updateEquipment(@Param('id') id: number, @Body() params: IEquipment) {
         try {
             const res = this.equipmentService.update(id, params)
             return res
         } catch (error) {
-            return "Cannot update equipment: " + error            
+            return "Cannot update equipment: " + error
         }
     }
 
@@ -74,7 +97,7 @@ export class EquipmentController {
             const res = this.equipmentService.reportDamaged(id, params)
             return res
         } catch (error) {
-            return "Cannot change the equipment damage: " + error            
+            return "Cannot change the equipment damage: " + error
         }
     }
 

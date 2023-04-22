@@ -12,7 +12,4 @@ export class LoanDetails {
 
     @ManyToOne(() => Equipment, (equipment) => equipment.id)
     equipment : Equipment 
-
-    @Column()
-    quantity : number
 }

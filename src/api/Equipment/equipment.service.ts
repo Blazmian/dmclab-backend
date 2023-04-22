@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equipment as EquipmentEntity } from 'src/entities/equipment.entity';
 import { IEquipment } from 'src/models/Equipment';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import * as fs from 'fs'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -55,6 +55,14 @@ export class EquipmentService {
             })
     }
 
+    async getEquipmentPhoto(id: number): Promise<Buffer> {
+        const res = await this.equipmentEntity.findOne({
+            where: { id: id },
+            select: ['photo'],
+        })
+        return res.photo
+    }
+
     async getUndamagedEquipment(): Promise<EquipmentEntity[]> {
         return await this.equipmentEntity.find({
             where: { damaged: false }
@@ -65,6 +73,15 @@ export class EquipmentService {
         return await this.equipmentEntity.find({
             where: { damaged: true }
         })
+    }
+
+    async changeEquipmentDamaged(id: number): Promise<UpdateResult> {
+        const res = await this.equipmentEntity.findOne({
+            where: { id: id }
+        })
+
+        res.damaged = !res.damaged
+        return this.update(id, res)
     }
 
     async update(id: number, body: IEquipment) {
