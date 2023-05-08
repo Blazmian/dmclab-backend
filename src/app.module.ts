@@ -1,3 +1,12 @@
+import { EnrolledService } from './api/Enrolled/enrolled.service';
+import { EnrolledController } from './api/Enrolled/enrolled.controller';
+import { EnrolledModule } from './api/Enrolled/enrolled.module';
+import { SubjectService } from './api/Subject/subject.service';
+import { SubjectController } from './api/Subject/subject.controller';
+import { SubjectModule } from './api/Subject/subject.module';
+import { TeacherService } from './api/Teacher/teacher.service';
+import { TeacherController } from './api/Teacher/teacher.controller';
+import { TeacherModule } from './api/Teacher/teacher.module';
 import { AuthController } from './api/Auth/auth.controller';
 import { AuthModule } from './api/Auth/auth.module';
 import { AuthService } from './api/Auth/auth.service';
@@ -24,6 +33,9 @@ import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    EnrolledModule,
+    SubjectModule,
+    TeacherModule,
     AuthModule,
     EquipmentModule,
     UserModule,
@@ -32,6 +44,9 @@ import { JwtService } from '@nestjs/jwt';
     StudentModule,
     Connection],
   controllers: [
+    EnrolledController,
+    SubjectController,
+    TeacherController,
     AuthController,
     EquipmentController,
     UserController,
@@ -39,12 +54,15 @@ import { JwtService } from '@nestjs/jwt';
     CareerController,
     StudentController, AppController],
   providers: [
+    EnrolledService,
+    SubjectService,
+    TeacherService,
     JwtService,
     AuthService,
     EquipmentService,
     UserService,
     StaffService,
     CareerService,
-    StudentService, AppService, ],
+    StudentService, AppService,],
 })
 export class AppModule { }

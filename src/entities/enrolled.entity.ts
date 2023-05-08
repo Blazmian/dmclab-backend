@@ -5,11 +5,11 @@ import { Subject } from "./subject.entity"
 @Entity()
 export class Enrolled {
     @PrimaryGeneratedColumn()
-    id : number
+    id: number
 
     @ManyToOne(() => Student, (student) => student.control_number)
-    student : Student
+    student: Student
 
     @ManyToOne(() => Subject, (subject) => subject.id)
-    subject : Subject
+    subject: Subject
 }

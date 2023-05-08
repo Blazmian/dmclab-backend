@@ -16,7 +16,18 @@ export class CareerController {
             console.log("Career created!")
             return true
         } catch (error) {
-            return "Cannot create client: " + error
+            return "Cannot create career: " + error
+        }
+    }
+
+    @Post('/create_many')
+    CreateCareers(@Body() params: IValidateCareer[]): string | boolean {
+        try {
+            this.careerService.createCareer(params)
+            console.log("Careers created!")
+            return true
+        } catch (error) {
+            return "Cannot create careers: " + error
         }
     }
 
@@ -41,7 +52,7 @@ export class CareerController {
     }
 
     @Get('/one/:id')
-    getCareer(@Param('id') params): Promise<Career[]> | string {
+    getCareer(@Param('id') params): Promise<Career> | string {
         try {
             const res = this.careerService.get(params)
             return res

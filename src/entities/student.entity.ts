@@ -6,35 +6,35 @@ import { Loan } from "./loan.entity";
 @Entity()
 export class Student {
     @PrimaryColumn()
-    control_number : number
+    control_number: number
 
-    @Column({ length : 50 })
-    name : string
+    @Column({ length: 50 })
+    name: string
 
-    @Column({ length : 30 })
-    first_last_name : string
+    @Column({ length: 30 })
+    first_last_name: string
 
-    @Column({ length : 30 })
-    second_last_name : string
+    @Column({ length: 30 })
+    second_last_name: string
 
     @ManyToOne(() => Career, (career) => career.id)
-    career : Career
+    career: Career
 
     @Column()
-    semester : number
+    semester: number
 
     @Column("varbinary")
-    fingerprint : string
+    fingerprint: string
 
     @Column()
-    pin : number
+    pin: number
 
     @Column()
-    active : boolean
+    active: boolean
 
     @OneToMany(() => Enrolled, (enrolled) => enrolled.student)
-    enrolled : Enrolled[]
+    enrolled: Enrolled[]
 
     @OneToMany(() => Loan, (loan) => loan.student)
-    loans : Loan[]
+    loans: Loan[]
 }

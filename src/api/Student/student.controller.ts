@@ -1,7 +1,30 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { StudentService } from './student.service';
+import { IValidateStudent } from 'src/models/Student';
+import { Student } from 'src/entities/student.entity';
 
-@Controller()
+@Controller('student')
 export class StudentController {
+    constructor(private studentService: StudentService) {
 
+    }
 
+    @Post('/validate')
+    validateNewStudent(@Body() students: IValidateStudent[]) {
+        try {
+            const res = this.studentService.validateStudents(students)
+            return res
+        } catch (error) {
+            return "Cannot validate students: " + error
+        }
+    }
+
+    @Get('/one/:id')
+    getStudent(@Param('id') control_number: number): Promise<Student> | string {
+        try {
+            return this.studentService.get(control_number)            
+        } catch (error) {
+            return "Cannot read students: " + error
+        }
+    }
 }

@@ -7,20 +7,20 @@ import { Teacher } from "./teacher.entity";
 @Entity()
 export class Subject {
     @PrimaryColumn()
-    id : number
+    id: number
 
-    @Column({ length : 50 })
-    subject : string
+    @Column({ length: 50 })
+    subject: string
 
     @ManyToOne(() => Career, (career) => career.id)
-    career : Career
+    career: Career
 
     @ManyToOne(() => Teacher, (teacher) => teacher.control_number)
-    teacher : Teacher
+    teacher: Teacher
 
     @OneToMany(() => Enrolled, (enrolled) => enrolled.subject)
-    enrolled : Enrolled[]
-    
+    enrolled: Enrolled[]
+
     @OneToMany(() => Loan, (loan) => loan.subject_id)
-    loans : Loan[]
+    loans: Loan[]
 }

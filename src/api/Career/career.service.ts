@@ -40,12 +40,16 @@ export class CareerService {
         return await this.careerEntity.insert(career)
     }
 
+    async createCareer(careersData: IValidateCareer[]): Promise<CareerEntity[]> {
+        return await this.careerEntity.save(careersData)
+    }
+
     async getAll(): Promise<CareerEntity[]> {
         return await this.careerEntity.find()
     }
 
-    async get(id: number): Promise<CareerEntity[]> {
-        return await this.careerEntity.find({
+    async get(id: number): Promise<CareerEntity> {
+        return await this.careerEntity.findOne({
             where: { id: id }
         })
     }
