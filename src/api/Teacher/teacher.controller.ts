@@ -28,7 +28,7 @@ export class TeacherController {
             return "Cannot read teachers: " + error
         }
     }
-    @Get('all')
+    @Get('/all')
     async getTeachers(): Promise<Teacher[] | string> {
         try {
             const teachers = await this.teacherService.getAll();
