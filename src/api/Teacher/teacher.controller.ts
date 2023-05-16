@@ -19,6 +19,17 @@ export class TeacherController {
         }
     }
 
+    @Post('/create_many')
+    CreateTeachers(@Body() params: IValidateTeacher[]): string | boolean {
+        try {
+            this.teacherService.createTeacher(params)
+            console.log("Teachers created!")
+            return true
+        } catch (error) {
+            return "Cannot create teachers: " + error
+        }
+    }
+
     @Get('/one/:id')
     getCareer(@Param('id') params): Promise<Teacher> | string {
         try {

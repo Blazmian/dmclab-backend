@@ -15,7 +15,7 @@ export class CareerService {
     async validateCareer(careers: IValidateCareer[]) {
         var noExists = []
         var existingCareerNoChanges = []
-        var existingCareerWithChanges = {}
+        var existingCareerWithChanges = { old: [], new: [] }
         for (const career of careers) {
             const existingCareer = await this.careerEntity.findOne({ where: { id: career.id } })
             if (existingCareer) {
@@ -23,7 +23,8 @@ export class CareerService {
                     existingCareerNoChanges.push(career)
                 }
                 else {
-                    existingCareerWithChanges = Object.assign(existingCareerWithChanges, { career: existingCareer, newCareer: career })
+                    existingCareerWithChanges.old.push(existingCareer)
+                    existingCareerWithChanges.new.push(career)
                 }
             } else {
                 noExists.push(career)

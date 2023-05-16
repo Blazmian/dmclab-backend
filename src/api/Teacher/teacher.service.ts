@@ -14,7 +14,7 @@ export class TeacherService {
     async validateTeachers(teachers: IValidateTeacher[]) {
         var noExists = []
         var existingTeacherNoChanges = []
-        var existingTeacherWithChanges = {}
+        var existingTeacherWithChanges = { old: [], new: [] }
         for (const teacher of teachers) {
             const existingTeacher = await this.teacherEntity.findOne({ where: { control_number: teacher.control_number } })
             if (existingTeacher) {
@@ -25,7 +25,8 @@ export class TeacherService {
                     existingTeacherNoChanges.push(teacher)
                 }
                 else {
-                    existingTeacherWithChanges = Object.assign(existingTeacherWithChanges, { teacher: existingTeacher, newTeacher: teacher })
+                    existingTeacherWithChanges.old.push(existingTeacher)
+                    existingTeacherWithChanges.new.push(teacher)
                 }
             } else {
                 noExists.push(teacher)
@@ -36,6 +37,10 @@ export class TeacherService {
             existWithChanges: existingTeacherWithChanges,
             existNoChanges: existingTeacherNoChanges
         }
+    }
+
+    async createTeacher(teachersData: IValidateTeacher[]): Promise<TeacherEntity[]> {
+        return await this.teacherEntity.save(teachersData)
     }
 
     async get(control_number: number): Promise<TeacherEntity> {

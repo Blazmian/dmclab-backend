@@ -18,18 +18,17 @@ export class EnrolledService {
     async validateEnrolleds(enrolleds: IValidateEnrolled[]) {
         var noExists = []
         var existingEnrolledNoChanges = []
-        var existingEnrolledWithChanges = {}
+        var existingEnrolledWithChanges = { old: [], new: [] }
         for (const enrolled of enrolleds) {
-            const existingEnrolled = await this.enrolledEntity.findOne({ where: { id: enrolled.id } })
+            const existingEnrolled = await this.enrolledEntity.findOne({ where: { id: enrolled.id }, relations: { student: true, subject: true } })
             if (existingEnrolled) {
-                const student = await this.studentService.get(enrolled.student)
-                const subject = await this.subjectService.get(enrolled.subject)
-                if (existingEnrolled.student === student &&
-                    existingEnrolled.subject === subject) {
+                if (existingEnrolled.student.control_number === enrolled.student &&
+                    existingEnrolled.subject.id === enrolled.subject) {
                     existingEnrolledNoChanges.push(enrolled)
                 }
                 else {
-                    existingEnrolledWithChanges = Object.assign(existingEnrolledWithChanges, { teacher: existingEnrolled, newTeacher: enrolled })
+                    existingEnrolledWithChanges.old.push(existingEnrolled)
+                    existingEnrolledWithChanges.new.push(enrolled)
                 }
             } else {
                 noExists.push(enrolled)
@@ -40,5 +39,20 @@ export class EnrolledService {
             existWithChanges: existingEnrolledWithChanges,
             existNoChanges: existingEnrolledNoChanges
         }
+    }
+
+    async createEnrolled(enrolledsData: IValidateEnrolled[]): Promise<EnrolledEntity[]> {
+        const newEnrolleds = []
+        for (const enrolled of enrolledsData) {
+            const student = await this.studentService.get(enrolled.student)
+            const subject = await this.subjectService.get(enrolled.subject)
+            const newEnrolled = {
+                ...enrolled,
+                student: student,
+                subject: subject
+            }
+            newEnrolleds.push(newEnrolled)
+        }
+        return await this.enrolledEntity.save(newEnrolleds)
     }
 }

@@ -19,6 +19,17 @@ export class SubjectController {
         }
     }
 
+    @Post('/create_many')
+    CreateSubjects(@Body() params: IValidateSubject[]): string | boolean {
+        try {
+            this.subjectService.createSubject(params)
+            console.log("Subjects created!")
+            return true
+        } catch (error) {
+            return "Cannot create subjects: " + error
+        }
+    }
+
     @Get('/one/:id')
     getSubject(@Param('id') id: number): Promise<Subject> | string {
         try {

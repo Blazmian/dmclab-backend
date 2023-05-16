@@ -18,19 +18,18 @@ export class SubjectService {
     async validateSubject(subjects: IValidateSubject[]) {
         var noExists = []
         var existingSubjectNoChanges = []
-        var existingSubjectWithChanges = {}
+        var existingSubjectWithChanges = { old: [], new: [] }
         for (const subject of subjects) {
-            const existingSubject = await this.subjectEntity.findOne({ where: { id: subject.id } })
-            const career = await this.careerService.get(subject.career)
-            const teacher = await this.teacherService.get(subject.teacher)
+            const existingSubject = await this.subjectEntity.findOne({ where: { id: subject.id }, relations: { career: true, teacher: true } })
             if (existingSubject) {
                 if (existingSubject.subject === subject.subject &&
-                    existingSubject.career === career &&
-                    existingSubject.teacher === teacher) {
+                    existingSubject.career.id === subject.career &&
+                    existingSubject.teacher.control_number === subject.teacher) {
                     existingSubjectNoChanges.push(subject)
                 }
                 else {
-                    existingSubjectWithChanges = Object.assign(existingSubjectWithChanges, { teacher: existingSubject, newTeacher: subject })
+                    existingSubjectWithChanges.old.push(existingSubject)
+                    existingSubjectWithChanges.new.push(subject)
                 }
             } else {
                 noExists.push(subject)
@@ -41,6 +40,21 @@ export class SubjectService {
             existWithChanges: existingSubjectWithChanges,
             existNoChanges: existingSubjectNoChanges
         }
+    }
+
+    async createSubject(subjectsData: IValidateSubject[]): Promise<SubjectEntity[]> {
+        const newSubjects = []
+        for (const subject of subjectsData) {
+            const career = await this.careerService.get(subject.career)
+            const teacher = await this.teacherService.get(subject.teacher)
+            const newStudent = {
+                ...subject,
+                career: career,
+                teacher: teacher
+            }
+            newSubjects.push(newStudent)
+        }
+        return await this.subjectEntity.save(newSubjects)
     }
 
     async get(id: number): Promise<SubjectEntity> {
