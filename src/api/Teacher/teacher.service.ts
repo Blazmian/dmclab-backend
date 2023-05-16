@@ -46,4 +46,7 @@ export class TeacherService {
     async get(control_number: number): Promise<TeacherEntity> {
         return await this.teacherEntity.findOne({ where: { control_number: control_number } })
     }
+    async getAll(): Promise<TeacherEntity[]> {
+        return await this.teacherEntity.find();
+      }
 }

@@ -3,7 +3,7 @@ import { IValidateTeacher } from 'src/models/Teacher';
 import { TeacherService } from './teacher.service';
 import { Teacher } from 'src/entities/teacher.entity';
 
-@Controller('teacher')
+@Controller('teachers')
 export class TeacherController {
     constructor(private teacherService: TeacherService) {
 
@@ -37,6 +37,17 @@ export class TeacherController {
             return res
         } catch (error) {
             return "Cannot read teachers: " + error
+        }
+    }
+    @Get('/all')
+    async getTeachers(): Promise<Teacher[] | string> {
+        try {
+            const teachers = await this.teacherService.getAll();
+            console.log(teachers);
+            return teachers;
+        } catch (error) {
+            console.error(error);
+            return "Cannot read users: " + error.message;
         }
     }
 }

@@ -17,7 +17,7 @@ export class Student {
     @Column({ length: 30 })
     second_last_name: string
 
-    @ManyToOne(() => Career, (career) => career.id)
+    @ManyToOne(() => Career, (career) => career.students) 
     career: Career
 
     @Column()
