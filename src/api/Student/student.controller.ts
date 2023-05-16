@@ -27,7 +27,7 @@ export class StudentController {
             return "Cannot read students: " + error
         }
     }
-    @Get('all')
+    @Get('/all')
     async getStudents(): Promise< string | Student[]>{
         try {
             const res = await this.studentService.getAll()
