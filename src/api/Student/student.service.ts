@@ -57,9 +57,7 @@ export class StudentService {
     async get(control_number: number): Promise<StudentEntity> {
         return await this.studentEntity.findOne({ where: { control_number: control_number } })
     }
-    /*async getAll(): Promise<StudentEntity[]> {
-        return await this.studentEntity.find()
-    }*/
+    
     async getAll(): Promise<StudentEntity[]> {
         return await this.studentEntity.find({ relations: ['career'] });
       }
