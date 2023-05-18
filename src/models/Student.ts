@@ -1,5 +1,3 @@
-import { Career } from "src/entities/career.entity"
-
 export interface IValidateStudent {
     control_number: number
     name: string
@@ -10,4 +8,9 @@ export interface IValidateStudent {
     fingerprint: string
     pin: number
     active: boolean
+}
+
+export interface ILoginStudent {
+    control_number: number
+    pin: number
 }

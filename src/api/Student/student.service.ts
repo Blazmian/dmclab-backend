@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student as StudentEntity } from 'src/entities/student.entity';
-import { IValidateStudent } from 'src/models/Student';
+import { ILoginStudent, IValidateStudent } from 'src/models/Student';
 import { Repository } from 'typeorm';
 import { CareerService } from '../Career/career.service';
 
@@ -12,6 +12,19 @@ export class StudentService {
         private studentEntity: Repository<StudentEntity>,
         private careerService: CareerService
     ) { }
+
+    async loginStudent(studentInfo: ILoginStudent): Promise<StudentEntity | boolean> {
+        const student = await this.get(studentInfo.control_number)
+        if (student && student.pin === studentInfo.pin) {
+            return await this.studentEntity.findOne({
+                where: { control_number: studentInfo.control_number },
+                relations: ['career', 'enrolled', 'enrolled.subject', 'enrolled.subject.teacher'],
+                select: ['control_number', 'name', 'first_last_name', 'second_last_name', 'semester', 'active']
+            })
+        } else {
+            return false
+        }
+    }
 
     async validateStudents(students: IValidateStudent[]) {
         var noExists = []
@@ -57,9 +70,9 @@ export class StudentService {
     async get(control_number: number): Promise<StudentEntity> {
         return await this.studentEntity.findOne({ where: { control_number: control_number } })
     }
-    
+
     async getAll(): Promise<StudentEntity[]> {
         return await this.studentEntity.find({ relations: ['career'] });
-      }
+    }
 
 }
