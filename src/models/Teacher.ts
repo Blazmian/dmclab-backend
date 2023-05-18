@@ -7,3 +7,8 @@ export interface IValidateTeacher {
     fingerprint: string
     pin: number
 }
+
+export interface ILoginTeacher {
+    control_number: number
+    pin: number
+}

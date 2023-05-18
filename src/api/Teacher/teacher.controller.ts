@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { IValidateTeacher } from 'src/models/Teacher';
+import { ILoginTeacher, IValidateTeacher } from 'src/models/Teacher';
 import { TeacherService } from './teacher.service';
 import { Teacher } from 'src/entities/teacher.entity';
 
@@ -16,6 +16,15 @@ export class TeacherController {
             return res
         } catch (error) {
             return "Cannot validate teachers: " + error
+        }
+    }
+
+    @Post('/login')
+    loginTeacher(@Body() info: ILoginTeacher): Promise<Teacher | boolean> | string {
+        try {
+            return this.teacherService.loginTeacher(info)
+        } catch (error) {
+            return "Cannot login teacher: " + error
         }
     }
 

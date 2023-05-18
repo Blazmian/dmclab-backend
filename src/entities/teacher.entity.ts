@@ -1,5 +1,6 @@
 import { Entity, PrimaryColumn, Column, OneToMany } from "typeorm"
 import { Subject } from "./subject.entity"
+import { Loan } from "./loan.entity"
 
 
 @Entity()
@@ -27,4 +28,7 @@ export class Teacher {
 
     @OneToMany(() => Subject, (subject) => subject.teacher)
     subjects: Subject[]
+
+    @OneToMany(() => Loan, (loan) => loan.teacher)
+    loans: Loan[]
 }

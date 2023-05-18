@@ -60,4 +60,9 @@ export class SubjectService {
     async get(id: number): Promise<SubjectEntity> {
         return await this.subjectEntity.findOne({ where: { id: id } })
     }
+
+    async getSubjectsTeacher(id: number) {
+        const teacher = await this.teacherService.get(id)
+        return await this.subjectEntity.find({ where: { teacher: teacher } })
+    }
 }

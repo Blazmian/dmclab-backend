@@ -3,45 +3,49 @@ import { LoanDetails } from "./loan.details.entity"
 import { User } from "./user.entity"
 import { Student } from "./student.entity"
 import { Subject } from "./subject.entity"
+import { Teacher } from "./teacher.entity"
 
 @Entity()
 export class Loan {
     @PrimaryGeneratedColumn()
-    folio : number 
+    folio: number
 
     @ManyToOne(() => Student, (student) => student.control_number)
-    student : Student
-    
+    student: Student
+
+    @ManyToOne(() => Teacher, (teacher) => teacher.control_number)
+    teacher: Teacher
+
     @ManyToOne(() => User, (user) => user.username)
-    user : User
-    
+    user: User
+
     @ManyToOne(() => Subject, (subject) => subject.id)
-    subject_id : Subject
-    
+    subject_id: Subject
+
     @Column("date")
-    date : Date
-    
+    date: Date
+
     @Column()
-    hours : number
-    
-    @Column({ length : 10 })
-    class : string
-    
+    hours: number
+
+    @Column({ length: 10 })
+    class: string
+
     @Column()
-    members : number
-    
+    members: number
+
     @Column()
-    delivered : boolean
+    delivered: boolean
 
     @Column("time")
-    delivery_time : Date
-    
+    delivery_time: Date
+
     @Column()
-    returned : boolean
+    returned: boolean
 
     @Column("time")
-    return_time : Date
+    return_time: Date
 
     @OneToMany(() => LoanDetails, (details) => details.loan)
-    details : LoanDetails[]
+    details: LoanDetails[]
 }

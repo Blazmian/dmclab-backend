@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Teacher as TeacherEntity } from 'src/entities/teacher.entity';
-import { IValidateTeacher } from 'src/models/Teacher';
+import { ILoginTeacher, IValidateTeacher } from 'src/models/Teacher';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -10,6 +10,19 @@ export class TeacherService {
         @InjectRepository(TeacherEntity)
         private teacherEntity: Repository<TeacherEntity>
     ) { }
+
+    async loginTeacher(teacherInfo: ILoginTeacher): Promise<TeacherEntity | boolean> {
+        const teacher = await this.get(teacherInfo.control_number)
+        if (teacher && teacher.pin === teacherInfo.pin) {
+            return await this.teacherEntity.findOne({
+                where: { control_number: teacherInfo.control_number },
+                select: ['control_number', 'name', 'first_last_name', 'second_last_name'],
+                relations: ['subjects']
+            })
+        } else {
+            return false
+        }
+    }
 
     async validateTeachers(teachers: IValidateTeacher[]) {
         var noExists = []
