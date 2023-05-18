@@ -34,6 +34,9 @@ export class Equipment {
     damaged: boolean
 
     @Column()
+    borrowed: boolean
+
+    @Column()
     photo: Buffer
 
     @OneToMany(() => LoanDetails, (details) => details.equipment)

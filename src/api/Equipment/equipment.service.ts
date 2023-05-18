@@ -44,7 +44,7 @@ export class EquipmentService {
 
     async getAll(): Promise<EquipmentEntity[]> {
         return await this.equipmentEntity.find({
-            select: ['id', 'equipment_name', 'equipment_number', 'brand', 'model', 'serial_number', 'projector', 'extension', 'hdmi', 'damaged']
+            select: ['id', 'equipment_name', 'equipment_number', 'brand', 'model', 'serial_number', 'projector', 'extension', 'hdmi', 'damaged', 'borrowed']
         })
     }
 
@@ -52,6 +52,30 @@ export class EquipmentService {
         return await this.equipmentEntity.find(
             {
                 where: { id: id }
+            })
+    }
+
+    async getEquipmentForOrder(): Promise<EquipmentEntity[]> {
+        return await this.equipmentEntity.find(
+            {
+                where: {
+                    projector: false,
+                    borrowed: false,
+                    damaged: false
+                },
+                select: ['id', 'equipment_name', 'equipment_number']
+            })
+    }
+
+    async getProjectorForOrder(): Promise<EquipmentEntity[]> {
+        return await this.equipmentEntity.find(
+            {
+                where: {
+                    projector: true,
+                    borrowed: false,
+                    damaged: false
+                },
+                select: ['id', 'equipment_name', 'equipment_number']
             })
     }
 

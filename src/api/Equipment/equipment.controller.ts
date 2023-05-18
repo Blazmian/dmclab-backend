@@ -40,6 +40,24 @@ export class EquipmentController {
         }
     }
 
+    @Get('/equipment-order')
+    getEquipmentOrder(): Promise<Equipment[]> | string {
+        try {
+            return this.equipmentService.getEquipmentForOrder()
+        } catch (error) {
+            return "Cannot read equipments: " + error
+        }
+    }
+
+    @Get('/projector-order')
+    getProjectorOrder(): Promise<Equipment[]> | string {
+        try {
+            return this.equipmentService.getProjectorForOrder()
+        } catch (error) {
+            return "Cannot read equipments: " + error
+        }
+    }
+
     @Get('one/photo/:id')
     async getEquipmentPhoto(@Param('id') params, @Res() res: Response): Promise<void | string> {
         try {
