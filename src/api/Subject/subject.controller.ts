@@ -33,7 +33,16 @@ export class SubjectController {
     @Get('/one/:id')
     getSubject(@Param('id') id: number): Promise<Subject> | string {
         try {
-            return this.subjectService.get(id)            
+            return this.subjectService.get(id)
+        } catch (error) {
+            return "Cannot read subjects: " + error
+        }
+    }
+
+    @Get('/teacher/:id')
+    getTeacherSubject(@Param('id') id: number): Promise<Subject> | string {
+        try {
+            return this.subjectService.getTeacherSubject(id)
         } catch (error) {
             return "Cannot read subjects: " + error
         }

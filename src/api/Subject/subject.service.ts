@@ -65,4 +65,8 @@ export class SubjectService {
         const teacher = await this.teacherService.get(id)
         return await this.subjectEntity.find({ where: { teacher: teacher } })
     }
+
+    async getTeacherSubject(idSubject: number): Promise<SubjectEntity> {
+        return await this.subjectEntity.findOne({ where: { id: idSubject }, relations: ['teacher'] })
+    }
 }
