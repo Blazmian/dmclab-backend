@@ -15,7 +15,7 @@ export class Staff {
     @Column({ length: 30 })
     second_last_name: string
 
-    @Column('longblob')
+    @Column('longblob', { nullable: true })
     photo: Buffer
 
     @Column({ default: false })

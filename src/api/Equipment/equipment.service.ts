@@ -63,7 +63,8 @@ export class EquipmentService {
                     borrowed: false,
                     damaged: false
                 },
-                select: ['id', 'equipment_name', 'equipment_number']
+                select: ['id', 'equipment_name', 'equipment_number'],
+                order: { equipment_name: 'ASC' }
             })
     }
 
@@ -75,7 +76,7 @@ export class EquipmentService {
                     borrowed: false,
                     damaged: false
                 },
-                select: ['id', 'equipment_name', 'equipment_number']
+                select: ['id', 'equipment_name', 'equipment_number', 'hdmi']
             })
     }
 

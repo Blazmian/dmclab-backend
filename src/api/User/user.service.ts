@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User as UserEntity } from 'src/entities/user.entity';
 import { hash } from 'bcrypt'
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { StaffService } from '../Staff/staff.service';
 import { IUser } from 'src/models/User';
 

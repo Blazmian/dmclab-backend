@@ -18,6 +18,6 @@ async function bootstrap() {
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   app.enableCors()
   SwaggerModule.setup('api', app, document)
-  await app.listen(3000);
+  await app.listen(8000);
 }
 bootstrap();
