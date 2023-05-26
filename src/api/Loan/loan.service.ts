@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Loan as LoanEntity } from 'src/entities/loan.entity';
+import { Loan, Loan as LoanEntity } from 'src/entities/loan.entity';
 import { ICreateLoan } from 'src/models/Loan';
 import { DeepPartial, Repository } from 'typeorm';
 import { SubjectService } from '../Subject/subject.service';
@@ -59,6 +59,7 @@ export class LoanService {
         }
         try {
             const loan = await this.loanEntity.save(newLoan)
+            const updateEquipments = await this.equipmentService.updateBorrow(equipmentForBorrow)
             const details = await this.loanDetailsService.create(loan, equipmentForBorrow)
             if (details) {
                 return true
@@ -67,5 +68,23 @@ export class LoanService {
         } catch (error) {
             return "Cannot submit the loan: " + error
         }
+    }
+
+    async getNotDelivered(): Promise<LoanEntity[]> {
+        return await this.loanEntity.find({
+            where: { delivered: false },
+            relations: ['details', 'details.equipment', 'subject', 'subject.career', 'subject.teacher', 'student']
+        })
+    }
+
+    async setDelivered(folio: number): Promise<Loan | boolean> {
+        const loan = await this.loanEntity.findOne({ where: { folio: folio } })
+        if (loan) {
+            const now = new Date()
+            loan.delivered = true
+            loan.delivery_time = now
+            return await this.loanEntity.save(loan)
+        }
+        return false
     }
 }

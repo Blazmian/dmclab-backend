@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equipment as EquipmentEntity } from 'src/entities/equipment.entity';
-import { IEquipment } from 'src/models/Equipment';
+import { IEquipment, IEquipmentAll } from 'src/models/Equipment';
 import { Repository, UpdateResult } from 'typeorm';
 import * as fs from 'fs'
 import { v4 as uuidv4 } from 'uuid'
@@ -123,6 +123,15 @@ export class EquipmentService {
 
     async update(id: number, body: IEquipment) {
         return await this.equipmentEntity.update(id, body)
+    }
+
+    async updateBorrow(equipments: IEquipmentAll[]) {
+        const newEquipments = []
+        for(const equipment of equipments) {
+            equipment.borrowed = !equipment.borrowed
+            newEquipments.push(equipment)
+        }
+        return await this.equipmentEntity.save(newEquipments)
     }
 
     async reportDamaged(id: number, body: boolean) {
