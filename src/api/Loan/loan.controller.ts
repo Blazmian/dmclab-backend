@@ -10,7 +10,7 @@ export class LoanController {
     async Create(@Body() data: ICreateLoan) {
         try {
             const res = await this.loanService.createLoan(data)
-            if (res) {
+            if (res === true) {
                 return true
             } else {
                 return res

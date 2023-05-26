@@ -31,7 +31,7 @@ export class LoanService {
                     equipmentForBorrow.push(equipmentNotBorrowed[i])
                 }
             } else {
-                return "Equipment cannot be borrowed. Exceeds stock limit."
+                return equipment.name
             }
         }
 
@@ -39,10 +39,10 @@ export class LoanService {
         let student = null, teacher = null
         if (data.student) {
             student = await this.studentService.get(data.student)
-        } else if (data.teacher) {
+        }
+
+        if (data.teacher) {
             teacher = await this.teacherService.get(data.teacher)
-        } else {
-            return false
         }
 
         const subject = await this.subjectService.get(data.subject)
@@ -65,7 +65,7 @@ export class LoanService {
             }
             return false
         } catch (error) {
-            return "Cannot submit the loan"
+            return "Cannot submit the loan: " + error
         }
     }
 }
