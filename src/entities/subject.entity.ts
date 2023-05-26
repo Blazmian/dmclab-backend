@@ -21,6 +21,6 @@ export class Subject {
     @OneToMany(() => Enrolled, (enrolled) => enrolled.subject)
     enrolled: Enrolled[]
 
-    @OneToMany(() => Loan, (loan) => loan.subject_id)
+    @OneToMany(() => Loan, (loan) => loan.subject)
     loans: Loan[]
 }

@@ -20,7 +20,7 @@ export class Loan {
     user: User
 
     @ManyToOne(() => Subject, (subject) => subject.id)
-    subject_id: Subject
+    subject: Subject
 
     @Column("date")
     date: Date
@@ -31,16 +31,16 @@ export class Loan {
     @Column({ length: 10 })
     class: string
 
-    @Column()
+    @Column({ default: 1 })
     members: number
 
-    @Column()
+    @Column({ default: false })
     delivered: boolean
 
     @Column("time")
     delivery_time: Date
 
-    @Column()
+    @Column({ default: false })
     returned: boolean
 
     @Column("time")

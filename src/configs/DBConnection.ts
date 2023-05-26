@@ -12,12 +12,11 @@ import { Teacher } from "src/entities/teacher.entity";
 
 export const Connection = TypeOrmModule.forRoot({
     type: 'mysql',
-    host: 'be9lf5l7lfkguleqjhrr-mysql.services.clever-cloud.com',
+    host: 'localhost',
     port: 3306,
-    username: 'uwkqptodwvexncrt',
-    password: 'hsxZKOKW8ak2eOOMDGxL',
-    database: 'be9lf5l7lfkguleqjhrr',
-    ssl: { rejectUnauthorized: false },
+    username: 'root',
+    password: '',
+    database: 'dmclab',
     entities: [Career, Enrolled, Equipment, Loan, LoanDetails, User, Staff, Student, Subject, Teacher],
-    synchronize: false
+    synchronize: true
 })

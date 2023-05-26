@@ -80,6 +80,18 @@ export class EquipmentService {
             })
     }
 
+    async getEquipmentNotBorrowed(name: string): Promise<EquipmentEntity[]> {
+        return await this.equipmentEntity.find(
+            {
+                where: {
+                    equipment_name: name,
+                    borrowed: false,
+                    damaged: false
+                },
+                select: ['id', 'equipment_name', 'equipment_number', 'hdmi']
+            })
+    }
+
     async getEquipmentPhoto(id: number): Promise<Buffer> {
         const res = await this.equipmentEntity.findOne({
             where: { id: id },

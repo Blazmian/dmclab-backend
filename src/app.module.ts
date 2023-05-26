@@ -1,3 +1,7 @@
+import { LoanDetailsService } from './api/LoanDetails/loandetails.service';
+import { LoanController } from './api/Loan/loan.controller';
+import { LoanService } from './api/Loan/loan.service';
+import { LoanModule } from './api/Loan/loan.module';
 import { EnrolledService } from './api/Enrolled/enrolled.service';
 import { EnrolledController } from './api/Enrolled/enrolled.controller';
 import { EnrolledModule } from './api/Enrolled/enrolled.module';
@@ -33,6 +37,7 @@ import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    LoanModule,
     EnrolledModule,
     SubjectModule,
     TeacherModule,
@@ -44,6 +49,7 @@ import { JwtService } from '@nestjs/jwt';
     StudentModule,
     Connection],
   controllers: [
+    LoanController,
     EnrolledController,
     SubjectController,
     TeacherController,
@@ -54,6 +60,8 @@ import { JwtService } from '@nestjs/jwt';
     CareerController,
     StudentController, AppController],
   providers: [
+        LoanDetailsService, 
+    LoanService,
     EnrolledService,
     SubjectService,
     TeacherService,
