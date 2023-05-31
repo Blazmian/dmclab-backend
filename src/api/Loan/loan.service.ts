@@ -87,4 +87,28 @@ export class LoanService {
         }
         return false
     }
+
+    async getNotReturned(): Promise<LoanEntity[]> {
+        return await this.loanEntity.find({
+            where: { returned: false, delivered: true },
+            relations: ['details', 'details.equipment', 'subject', 'subject.career', 'subject.teacher', 'student']
+        })
+    }
+
+    async setReturned(folio: number): Promise<Loan | boolean> {
+        const loan = await this.loanEntity.findOne({ where: { folio: folio } })
+        if (loan) {
+            const details = await this.loanDetailsService.getEquipments(loan)
+            const equipments = []
+            for (const detail of details) {
+                equipments.push(detail.equipment)
+            }
+            await this.equipmentService.updateBorrow(equipments)
+            const now = new Date()
+            loan.returned = true
+            loan.return_time = now
+            return await this.loanEntity.save(loan)
+        }
+        return false
+    }
 }

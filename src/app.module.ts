@@ -34,9 +34,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Connection } from './configs/DBConnection';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
+    Connection,
     LoanModule,
     EnrolledModule,
     SubjectModule,
@@ -46,8 +49,7 @@ import { JwtService } from '@nestjs/jwt';
     UserModule,
     StaffModule,
     CareerModule,
-    StudentModule,
-    Connection],
+    StudentModule],
   controllers: [
     LoanController,
     EnrolledController,
@@ -60,7 +62,7 @@ import { JwtService } from '@nestjs/jwt';
     CareerController,
     StudentController, AppController],
   providers: [
-        LoanDetailsService, 
+    LoanDetailsService,
     LoanService,
     EnrolledService,
     SubjectService,

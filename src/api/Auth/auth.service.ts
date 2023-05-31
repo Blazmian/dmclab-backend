@@ -28,7 +28,6 @@ export class AuthService {
     async login(userObj: IUserLogin) {
         const findUser = await this.userService.get(userObj.username)
 
-        console.log()
         const payload = { username: findUser.username, staff: findUser.staff }
         return {
             user: findUser,

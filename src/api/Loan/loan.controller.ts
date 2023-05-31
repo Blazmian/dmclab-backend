@@ -38,4 +38,23 @@ export class LoanController {
             return "Cannot read loans: " + error
         }
     }
+
+    @Get('/not-returned')
+    getNotReturned() {
+        try {
+            return this.loanService.getNotReturned()
+        } catch (error) {
+            return "Cannot read loans: " + error
+        }
+    }
+
+    @Post('/return-loan/:folio')
+    async returnLoan(@Param('folio') params) {
+        try {
+            const res = await this.loanService.setReturned(params)
+            return res
+        } catch (error) {
+            return "Cannot read loans: " + error
+        }
+    }
 }

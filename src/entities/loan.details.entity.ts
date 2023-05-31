@@ -7,7 +7,7 @@ export class LoanDetails {
     @PrimaryGeneratedColumn()
     id : number
 
-    @ManyToOne(() => Loan, (loan) => loan.folio)
+    @ManyToOne(() => Loan, (loan) => loan.details)
     loan : Loan
 
     @ManyToOne(() => Equipment, (equipment) => equipment.id)

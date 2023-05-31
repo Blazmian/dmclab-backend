@@ -29,4 +29,12 @@ export class LoanDetailsService {
 
         return true
     }
+
+    async getEquipments(loan: Loan): Promise<LoanDetailsEntity[]> {
+        const res = await this.loanDetailsEntity.find({
+            where: { loan: loan },
+            relations: ['equipment'],
+        })
+        return res
+    }
 }
