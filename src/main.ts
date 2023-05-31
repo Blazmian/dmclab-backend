@@ -3,7 +3,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express'
 import * as bodyParser from 'body-parser'
-import { config } from 'dotenv'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
