@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { ILoginStudent, IValidateStudent } from 'src/models/Student';
 import { Student } from 'src/entities/student.entity';
@@ -57,4 +57,15 @@ export class StudentController {
             return "Cannot read user: " + error
         }
     }
+
+    @Put('update/:id')
+    updateEq(@Param('id') id: number, @Body() params: Student) {
+        try {
+            const res = this.studentService.updateStudent(id, params)
+            return res
+        } catch (error) {
+            return "Cannot update student: " + error
+        }
+    }
+    
 }

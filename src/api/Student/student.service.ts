@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,  NotFoundException  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Student as StudentEntity } from 'src/entities/student.entity';
+import { Student, Student as StudentEntity } from 'src/entities/student.entity';
 import { ILoginStudent, IValidateStudent } from 'src/models/Student';
 import { Repository } from 'typeorm';
 import { CareerService } from '../Career/career.service';
@@ -73,6 +73,23 @@ export class StudentService {
 
     async getAll(): Promise<StudentEntity[]> {
         return await this.studentEntity.find({ relations: ['career'] });
+    }
+    async updateStudent(id: number, student: Student): Promise<Student> {
+        const existingStudent = await this.studentEntity.findOne({ where: { control_number: id } });
+        if (!existingStudent) {
+            throw new NotFoundException(`Equipo con ID ${id} no encontrado`);
+        }
+
+        // Actualizar los datos del usuario con los nuevos valores
+        existingStudent.name = student.name;
+        existingStudent.first_last_name = student.first_last_name;
+        existingStudent.second_last_name = student.second_last_name;
+        existingStudent.semester = student.semester;
+        existingStudent.career.career = student.career.career;
+        // Guardar los cambios en la base de datos
+        await this.studentEntity.save(existingStudent);
+
+        return existingStudent;
     }
 
 }

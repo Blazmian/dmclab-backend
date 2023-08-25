@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Equipment as EquipmentEntity } from 'src/entities/equipment.entity';
+import { Equipment, Equipment as EquipmentEntity } from 'src/entities/equipment.entity';
 import { IEquipment, IEquipmentAll } from 'src/models/Equipment';
 import { Repository, UpdateResult } from 'typeorm';
 import * as fs from 'fs'
@@ -127,13 +127,32 @@ export class EquipmentService {
 
     async updateBorrow(equipments: IEquipmentAll[]) {
         const newEquipments = []
-        for(const equipment of equipments) {
+        for (const equipment of equipments) {
             equipment.borrowed = !equipment.borrowed
             newEquipments.push(equipment)
         }
         return await this.equipmentEntity.save(newEquipments)
     }
+    async updateEq(id: number, equipment: Equipment): Promise<Equipment> {
+        const existingEq = await this.equipmentEntity.findOne({ where: { id: id } });
+        if (!existingEq) {
+            throw new NotFoundException(`Equipo con ID ${id} no encontrado`);
+        }
 
+        // Actualizar los datos del usuario con los nuevos valores
+        existingEq.equipment_name = equipment.equipment_name;
+        existingEq.equipment_number = equipment.equipment_number;
+        existingEq.brand = equipment.brand;
+        existingEq.model = equipment.model;
+        existingEq.serial_number = equipment.serial_number;
+        //obtener la foto 
+        existingEq.photo = equipment.photo;
+
+        // Guardar los cambios en la base de datos
+        await this.equipmentEntity.save(existingEq);
+
+        return existingEq;
+    }
     async reportDamaged(id: number, body: boolean) {
         return await this.equipmentEntity.update(id, { damaged: body })
     }

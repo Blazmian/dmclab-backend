@@ -100,7 +100,7 @@ export class EquipmentController {
     }
 
     @Put('update/:id')
-    updateEquipment(@Param('id') id: number, @Body() params: IEquipment) {
+    updateEq(@Param('id') id: number, @Body() params: IEquipment) {
         try {
             const res = this.equipmentService.update(id, params)
             return res

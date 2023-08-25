@@ -61,9 +61,10 @@ export class StaffController {
     }
 
     @Put('update/:id')
-    updatePersonal(@Param('id') id: number, @Body() params: IStaff) {
+    updateUser(@Param('id') id: number, @Body() params: IStaff) {
         try {
             const res = this.staffService.update(id, params)
+            console.log(res + "  ")
             return res
         } catch (error) {
             return "Cannot update personal: " + error

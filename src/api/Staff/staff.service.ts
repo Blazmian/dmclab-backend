@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Staff as StaffEntity } from 'src/entities/staff.entity';
+import { Staff, Staff as StaffEntity } from 'src/entities/staff.entity';
 import { IStaff, IStaffAll } from 'src/models/Staff';
 import { Not, Repository } from 'typeorm';
 import * as fs from 'fs'
@@ -76,7 +76,24 @@ export class StaffService {
     async update(id: number, body: IStaff) {
         return await this.staffEntity.update(id, body)
     }
-
+    async updateUser(id: number, staff: Staff): Promise<Staff> {
+        const existingUser = await this.staffEntity.findOne({ where: { id: id } });
+        if (!existingUser) {
+          throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
+        }
+    
+        // Actualizar los datos del usuario con los nuevos valores
+        existingUser.name = staff.name;
+        existingUser.first_last_name = staff.first_last_name;
+        existingUser.second_last_name = staff.second_last_name;
+        //obtener la foto ¿?
+        existingUser.photo = staff.photo;
+    
+        // Guardar los cambios en la base de datos
+        await this.staffEntity.save(existingUser);
+    
+        return existingUser;
+      }
     async updateInfo(staff: IStaffAll): Promise<StaffEntity> {
         return await this.staffEntity.save(staff)
     }
