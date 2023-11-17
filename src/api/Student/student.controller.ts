@@ -59,13 +59,14 @@ export class StudentController {
     }
 
     @Put('update/:id')
-    updateEq(@Param('id') id: number, @Body() params: Student) {
+    async updateEq(@Param('id') id: number, @Body() params: Student) {
         try {
-            const res = this.studentService.updateStudent(id, params)
-            return res
+            const res = await this.studentService.updateStudent(id, params);
+            return res;
         } catch (error) {
-            return "Cannot update student: " + error
+            console.error("Error updating student:", error);
+            return "Cannot update student: " + error.message; // Devuelve un mensaje de error más descriptivo
         }
     }
-    
+
 }

@@ -4,13 +4,15 @@ import { Student, Student as StudentEntity } from 'src/entities/student.entity';
 import { ILoginStudent, IValidateStudent } from 'src/models/Student';
 import { Repository } from 'typeorm';
 import { CareerService } from '../Career/career.service';
-
+import { Career } from 'src/entities/career.entity';
 @Injectable()
 export class StudentService {
     constructor(
         @InjectRepository(StudentEntity)
         private studentEntity: Repository<StudentEntity>,
-        private careerService: CareerService
+        private careerService: CareerService,
+        @InjectRepository(Career) // Inyecta el repositorio de Career
+        private careerEntity: Repository<Career>
     ) { }
 
     async loginStudent(studentInfo: ILoginStudent): Promise<StudentEntity | boolean> {
@@ -76,19 +78,31 @@ export class StudentService {
     }
     async updateStudent(id: number, student: Student): Promise<Student> {
         const existingStudent = await this.studentEntity.findOne({ where: { control_number: id } });
+    
         if (!existingStudent) {
-            throw new NotFoundException(`Equipo con ID ${id} no encontrado`);
+            throw new NotFoundException(`Estudiante con ID ${id} no encontrado`);
         }
-
-        // Actualizar los datos del usuario con los nuevos valores
+    
+        // Actualizar los datos del estudiante con los nuevos valores
         existingStudent.name = student.name;
         existingStudent.first_last_name = student.first_last_name;
         existingStudent.second_last_name = student.second_last_name;
         existingStudent.semester = student.semester;
-        existingStudent.career.career = student.career.career;
+    
+        if (student.career && student.career.career) {
+            const careerName = student.career.career;
+            const career = await this.careerEntity.findOne({ where: { career: careerName } });
+    
+            if (career) {
+                existingStudent.career = career;
+            } else {
+                throw new NotFoundException(`Carrera "${careerName}" no encontrada`);
+            }
+        }
+    
         // Guardar los cambios en la base de datos
         await this.studentEntity.save(existingStudent);
-
+    
         return existingStudent;
     }
 
